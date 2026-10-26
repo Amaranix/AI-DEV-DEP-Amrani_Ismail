@@ -1,0 +1,21 @@
+text,attendu,difficulte,erreur_connue
+"Commande reçue en deux jours, emballage soigné",POSITIVE,,
+"Pas déçu du tout, je recommande",POSITIVE,négation,
+"Arrivé cassé, bravo le transporteur",NEGATIVE,ironie,
+"Service client réactif et efficace",POSITIVE,vocabulaire absent,"erreur franche modèle (sac de mots insuffisant : prédit NEGATIVE avec confiance 0.62)"
+"Catastrophique du début à la fin",NEGATIVE,,
+"Qualité moyenne mais prix très correct",POSITIVE,avis mitigé,
+"Le produit semblait parfait au déballage mais il est tombé en panne après une heure",NEGATIVE,avis mitigé,
+"Rien à redire, tout est parfait",POSITIVE,négation,
+"À fuir absolument, pire expérience",NEGATIVE,,
+"Livraison un peu en retard mais article conforme",POSITIVE,avis mitigé,
+"Ne fonctionne pas du tout comme annoncé",NEGATIVE,négation,
+"Interface agréable et prise en main facile",POSITIVE,,
+"Très décevant, ne vaut pas son prix",NEGATIVE,erreur de vocabulaire,"erreur franche modèle (mot 'très' pondéré positif : prédit POSITIVE avec confiance 0.64)"
+"Jamais je ne recommanderai cette boutique",NEGATIVE,négation,
+"Très bon rapport qualité prix",POSITIVE,,
+"Impossible de joindre le support après trois tentatives",NEGATIVE,,
+"Franchement pas terrible, déception totale",NEGATIVE,négation,
+"Exactement ce que je cherchais, super",POSITIVE,,
+"Cadeau apprécié, fonctionne parfaitement",POSITIVE,vocabulaire absent,
+"Délais non respectés et colis endommagé",NEGATIVE,,

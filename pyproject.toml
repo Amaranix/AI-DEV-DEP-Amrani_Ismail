@@ -1,0 +1,46 @@
+[build-system]
+requires = ["setuptools>=68", "wheel"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "sentiment-app"
+version = "0.6.0"
+description = "Analyse de sentiment d'avis en français (projet TP1 à TP6)"
+requires-python = ">=3.11"
+dependencies = [
+    "scikit-learn>=1.4",
+    "joblib>=1.3",
+    "pandas>=2.0",
+    "click>=8.1",
+    "fastapi>=0.110",
+    "uvicorn>=0.29",
+]
+
+[project.scripts]
+sentiment = "sentiment_app.cli:main"
+
+# La roue contient le paquet, l'API et l'interface. Ni tests, ni données, ni modèle.
+[tool.setuptools.packages.find]
+include = ["sentiment_app*", "api*", "ui*"]
+
+[tool.ruff]
+target-version = "py311"
+line-length = 100
+extend-exclude = ["notebooks"]
+
+[tool.ruff.lint]
+# E4, E7, E9, F : erreurs probables ; I : ordre des imports ; B : constructions à risque
+select = ["E4", "E7", "E9", "F", "I", "B"]
+
+[tool.mypy]
+python_version = "3.11"
+check_untyped_defs = true
+warn_unused_ignores = true
+
+[[tool.mypy.overrides]]
+module = ["joblib", "joblib.*", "sklearn", "sklearn.*", "pandas", "pandas.*", "uvicorn", "uvicorn.*", "click", "click.*"]
+ignore_missing_imports = true
+
+[tool.coverage.report]
+show_missing = true
+skip_empty = true

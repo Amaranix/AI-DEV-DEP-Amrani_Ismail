@@ -1,0 +1,84 @@
+name: CI
+
+on:
+  push:
+    branches: [ main ]
+    tags: [ 'compte-rendu*', 'v*' ]
+  pull_request:
+    branches: [ main ]
+
+jobs:
+  test-and-quality:
+    name: Verification complete (TP1 a TP6)
+    runs-on: ubuntu-latest
+    steps:
+      - name: Recuperer le code (historique complet pour test_git_history)
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - name: Configurer Python 3.11
+        uses: actions/setup-python@v5
+        with:
+          python-version: "3.11"
+          cache: "pip"
+
+      - name: Installer les dependances de base
+        run: |
+          python -m venv .venv
+          . .venv/bin/activate
+          pip install --upgrade pip "streamlit==1.39.*"
+          pip install -r requirements.txt
+          pip install -e .
+
+      - name: Verifier l'environnement (check_setup.py)
+        run: |
+          . .venv/bin/activate
+          python scripts/check_setup.py
+
+      - name: Modele de demonstration pour les tests
+        run: |
+          . .venv/bin/activate
+          python src/make_demo.py
+          python src/train.py
+
+      - name: Outils de qualite (TP4)
+        run: |
+          . .venv/bin/activate
+          pip install -r requirements-dev.txt
+
+      - name: ruff
+        run: |
+          . .venv/bin/activate
+          ruff check .
+
+      - name: mypy
+        run: |
+          . .venv/bin/activate
+          mypy api
+
+      - name: Tests et couverture
+        run: |
+          . .venv/bin/activate
+          pytest -q --cov=api --cov-report=term-missing --cov-fail-under=95
+
+      - name: Valider la conformite du contrat de metriques (metrics.json)
+        run: |
+          . .venv/bin/activate
+          python -c "
+          import json
+          with open('models/metrics.json') as f:
+              m = json.load(f)
+          print('Metriques actuelles :', m)
+          assert m['f1_macro'] >= m['seuil_f1'], f'F1 insuffisant : {m[\"f1_macro\"]} < {m[\"seuil_f1\"]}'
+          print('Validation MLOps reussie : seuil F1 respecte')
+          "
+
+      - name: Roue installee hors du depot (TP6)
+        run: |
+          . .venv/bin/activate
+          pip install build
+          python -m build --wheel
+          python -m venv "$RUNNER_TEMP/roue"
+          "$RUNNER_TEMP/roue/bin/pip" install dist/*.whl
+          "$RUNNER_TEMP/roue/bin/sentiment" --version
